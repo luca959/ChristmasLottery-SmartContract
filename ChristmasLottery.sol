@@ -25,7 +25,7 @@ contract ChristmasLottery{
         return (LotteryFeed[last]);
     }
 
-    function GetNumOfPartecipants() public view returns (uint256  num ){
+    function GetNumOfTicket() public view returns (uint256  num ){
         require(msg.sender == owner, "Only Luca can read the number of Tickets bought :)");
         num =writers.length ;
         return (num);
