@@ -1,0 +1,2 @@
+# ChristmasLottery-SmartContract
+ ChristmasLottery
