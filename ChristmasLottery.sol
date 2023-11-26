@@ -25,7 +25,7 @@ contract ChristmasLottery{
         return (LotteryFeed[last]);
     }
 
-    function GetNumOfTicket() public view returns (uint256  num ){
+    function GetNumOfPartecipants() public view returns (uint256  num ){
         require(msg.sender == owner, "Only Luca can read the number of Tickets bought :)");
         num =writers.length ;
         return (num);
@@ -45,6 +45,13 @@ contract ChristmasLottery{
     function GetAllPartecipants() public view returns (address[] memory) {
         require(msg.sender == owner, "Only Luca can read all the Partecipants :)");
         return (LotteryPartecipants);
+    }
+    function ExtractLottery() public view returns(Ticket memory) {
+        require (LotteryPartecipants.length >= 1, "To extract the winner we must have at least 1 partecipant");
+        require(msg.sender == owner, "Only Luca can extract the winners :)");
+        uint randNo= uint (keccak256(abi.encodePacked (msg.sender, block.timestamp)))%5;
+        address wallet=LotteryPartecipants[randNo];
+        return LotteryFeed[wallet];
     }
 
     function SellTicket(string memory _name, uint256  _NumOfTickets) public {
