@@ -45,7 +45,7 @@ contract ChristmasLottery{
         return (messages);
     }
     function removeIndex(uint index) private{   
-        require(index < LotteryPartecipants.length);
+        require(index < LotteryPartecipants.length,"Tutti i partecipanti sono stati estratti");
         for(uint256 i = index ; i < LotteryPartecipants.length - 1; i ++)
         {
             LotteryPartecipants[i] = LotteryPartecipants[i + 1];
