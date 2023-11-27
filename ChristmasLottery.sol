@@ -10,9 +10,11 @@ contract ChristmasLottery{
     }
     mapping(address => Ticket) LotteryFeed;
     address owner;
+    address wallet;
     address last;
     address[] writers;
     address[] LotteryPartecipants;
+    address[] ExtractedPartecipants;
     
     event PersonAdded(uint256 _data, string _name, uint256 indexed _NumOfTickets);
 
@@ -46,11 +48,21 @@ contract ChristmasLottery{
         require(msg.sender == owner, "Only Luca can read all the Partecipants :)");
         return (LotteryPartecipants);
     }
-    function ExtractLottery() public view returns(Ticket memory) {
+    function CheckExtraction() private {
+        uint randNo= uint (keccak256(abi.encodePacked (msg.sender, block.timestamp)))%5;
+        wallet=LotteryPartecipants[randNo];
+        for (uint256 i=0; i<ExtractedPartecipants.length; i++){
+            while (ExtractedPartecipants[i]== wallet){
+                randNo= uint (keccak256(abi.encodePacked (msg.sender, block.timestamp)))%5;
+                wallet=LotteryPartecipants[randNo];
+            }
+        }    
+        ExtractedPartecipants.push(wallet);
+    }
+    function ExtractLottery() public returns(Ticket memory) {
         require (LotteryPartecipants.length >= 1, "To extract the winner we must have at least 1 partecipant");
         require(msg.sender == owner, "Only Luca can extract the winners :)");
-        uint randNo= uint (keccak256(abi.encodePacked (msg.sender, block.timestamp)))%5;
-        address wallet=LotteryPartecipants[randNo];
+        CheckExtraction();
         return LotteryFeed[wallet];
     }
 
