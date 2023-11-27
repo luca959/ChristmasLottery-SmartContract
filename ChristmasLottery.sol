@@ -13,6 +13,7 @@ contract ChristmasLottery{
     address owner;
     address wallet;
     address last;
+    uint randNo;
     address[] writers;
     address[] LotteryPartecipants;
     address[] ExtractedPartecipants;
@@ -53,10 +54,13 @@ contract ChristmasLottery{
 
         LotteryPartecipants.pop();
     }
+   // function showExtractNum() public view returns(uint ){ // i use this to check if the rand int is really random
+     //   return randNo; 
+    //}
     function Extraction() public returns (address[] memory) {
         require (LotteryPartecipants.length >= 1, "To extract the winner we must have at least 1 partecipant");
         require(msg.sender == owner, "Only Luca can extract the winners :)");
-        uint randNo= uint (keccak256(abi.encodePacked (msg.sender, block.timestamp)))%LotteryPartecipants.length;
+        randNo= uint (keccak256(abi.encodePacked (msg.sender, block.timestamp)))%LotteryPartecipants.length;
         wallet=LotteryPartecipants[randNo];
         removeIndex(randNo);
         return LotteryPartecipants;
