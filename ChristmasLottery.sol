@@ -87,5 +87,15 @@ contract ChristmasLottery{
         last = msg.sender;
         emit PersonAdded(block.timestamp, _name,_surname,_id, _NumOfTickets);
     }
+        function closeLottery() public {
+            require(msg.sender == owner, "Only Luca can Close the lottery :)");
+            for (uint256 i = 0; i < writers.length; i++) {
+                delete LotteryFeed[writers[i]];
+            }
+            delete writers;
+            delete LotteryPartecipants;
+            delete ExtractedPartecipants;
+
+    }
 
 }
