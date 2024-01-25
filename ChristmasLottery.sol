@@ -37,9 +37,6 @@ contract ChristmasLottery{
         return (num);
     }
 
-    function GetWriters() public view returns (address[] memory ){
-        return (writers);
-    }
     function GetAllPartecipants() public view returns (Ticket[] memory) {
         require(msg.sender == owner, "Only Luca can read all the tickets :)");
 
@@ -52,7 +49,7 @@ contract ChristmasLottery{
     }
     function removeIndex(uint index) private{   
         require(index < LotteryPartecipants.length,"Tutti i partecipanti sono stati estratti");
-        for(uint256 i = index ; i < LotteryPartecipants.length - 1; i ++)
+        for(uint256 i = index ; i < LotteryPartecipants.length ; i ++)
         {
             LotteryPartecipants[i] = LotteryPartecipants[i + 1];
         }
@@ -80,7 +77,7 @@ contract ChristmasLottery{
     function SellTicket(string memory _name,string memory _surname,uint256  _NumOfTickets) public {
         require (bytes(_name).length > 0 && bytes(_name).length < 256, "Message cannot be empty and cannot be longer than 256 chars");
         require (_NumOfTickets > 0, "Buyer must buy at least 1 ticket");
-        require (_NumOfTickets < 99, "Buyer must buy at least 1 ticket");
+        require (_NumOfTickets <= 99, "Buyer must buy at least 1 ticket");
         id= id+1;
 
         if (LotteryFeed[id].date == 0)
