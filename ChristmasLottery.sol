@@ -11,6 +11,7 @@ contract ChristmasLottery{
     }
     uint256 id=1;
     mapping(uint256 => Ticket) LotteryFeed;
+    //in order to delete map keep an array of all the keys
     address owner;
     address wallet;
     uint256 winner;
