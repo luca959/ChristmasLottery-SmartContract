@@ -8,8 +8,8 @@ contract ChristmasLottery{
         uint256 date;
         string Name;
         string Surname;
-        uint256 Id;
     }
+    uint256 id=1;
     mapping(uint256 => Ticket) LotteryFeed;
     address owner;
     address wallet;
@@ -19,7 +19,7 @@ contract ChristmasLottery{
     address[] writers;
     address[] LotteryPartecipants;
     
-    event PersonAdded(uint256 _data, string _name, string _surname,uint256 _id,uint256 indexed _NumOfTickets);
+    event PersonAdded(uint256 _data, uint256 id,string _name, string _surname,uint256 indexed _NumOfTickets);
 
     constructor() {
         owner = msg.sender;
@@ -72,20 +72,21 @@ contract ChristmasLottery{
         return (LotteryFeed[winner]);
     }
 
-    function SellTicket(string memory _name,string memory _surname,uint256  _id,uint256  _NumOfTickets) public {
+    function SellTicket(string memory _name,string memory _surname,uint256  _NumOfTickets) public {
         require (bytes(_name).length > 0 && bytes(_name).length < 256, "Message cannot be empty and cannot be longer than 256 chars");
         require (_NumOfTickets > 0, "Buyer must buy at least 1 ticket");
         require (_NumOfTickets < 99, "Buyer must buy at least 1 ticket");
+        id= id+1;
 
-        if (LotteryFeed[_id].date == 0)
+        if (LotteryFeed[id].date == 0)
             writers.push(msg.sender);
         
-        LotteryFeed[_id] = Ticket(block.timestamp, _name,_surname,_id);
+        LotteryFeed[id] = Ticket(block.timestamp, _name,_surname);
         for (uint256 i = 0; i < _NumOfTickets ; i++) {
             LotteryPartecipants.push(msg.sender);
         }
-        last = _id;
-        emit PersonAdded(block.timestamp, _name,_surname, _id,_NumOfTickets);
+        last = id;
+        emit PersonAdded(block.timestamp,id, _name,_surname,_NumOfTickets);
     }
     function closeLottery() public {
         require(msg.sender == owner, "Only Luca can Close the lottery :)");
