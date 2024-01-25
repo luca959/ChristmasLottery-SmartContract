@@ -19,7 +19,7 @@ contract ChristmasLottery{
     address[] writers;
     address[] LotteryPartecipants;
     
-    event PersonAdded(uint256 _data, string _name, string _surname,string _id,uint256 indexed _NumOfTickets);
+    event PersonAdded(uint256 _data, string _name, string _surname,uint256 _id,uint256 indexed _NumOfTickets);
 
     constructor() {
         owner = msg.sender;
@@ -85,7 +85,7 @@ contract ChristmasLottery{
             LotteryPartecipants.push(msg.sender);
         }
         last = _id;
-        emit PersonAdded(block.timestamp, _name,_surname,_id, _NumOfTickets);
+        emit PersonAdded(block.timestamp, _name,_surname, _id,_NumOfTickets);
     }
     function closeLottery() public {
         require(msg.sender == owner, "Only Luca can Close the lottery :)");
