@@ -8,8 +8,9 @@ contract ChristmasLottery{
         uint256 date;
         string Name;
         string Surname;
+        uint256 matricola;
     }
-    uint256 id=1;
+    uint256 id=0;
     mapping(uint256 => Ticket) LotteryFeed;
     //in order to delete map keep an array of all the keys
     address owner;
@@ -36,13 +37,16 @@ contract ChristmasLottery{
         return (num);
     }
 
+    function GetWriters() public view returns (address[] memory ){
+        return (writers);
+    }
     function GetAllPartecipants() public view returns (Ticket[] memory) {
         require(msg.sender == owner, "Only Luca can read all the tickets :)");
 
-        Ticket[] memory messages = new Ticket[](writers.length);
-        for (uint256 i = 0; i < writers.length; i++) {
+        Ticket[] memory messages = new Ticket[](id);
+        for (uint256 i = 0; i <id; ++i) {
 
-            messages[i]=LotteryFeed[i];
+            messages[i]=LotteryFeed[i+1];
         }
         return (messages);
     }
@@ -52,7 +56,6 @@ contract ChristmasLottery{
         {
             LotteryPartecipants[i] = LotteryPartecipants[i + 1];
         }
-        // swap LP[index] with LP[last] and then pop
 
         LotteryPartecipants.pop();
     }
@@ -82,21 +85,25 @@ contract ChristmasLottery{
         if (LotteryFeed[id].date == 0)
             writers.push(msg.sender);
         
-        LotteryFeed[id] = Ticket(block.timestamp, _name,_surname);
+        LotteryFeed[id] = Ticket(block.timestamp, _name,_surname,id);
         for (uint256 i = 0; i < _NumOfTickets ; i++) {
             LotteryPartecipants.push(msg.sender);
         }
         last = id;
         emit PersonAdded(block.timestamp,id, _name,_surname,_NumOfTickets);
     }
+
     function closeLottery() public {
         require(msg.sender == owner, "Only Luca can Close the lottery :)");
 
-        for (uint256 i = 0; i < writers.length; i++) {
+        for (uint256 i = 1; i < id; i++) {
             delete LotteryFeed[i];
         }
         delete writers;
         delete LotteryPartecipants;
+        delete id;
+        delete last;
+    
     }
 
 
