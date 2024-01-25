@@ -60,15 +60,16 @@ contract ChristmasLottery{
         LotteryPartecipants.pop();
     }
  
-    function Extraction() public returns (address[] memory) {
-        require (LotteryPartecipants.length >= 1, "To extract the winner we must have at least 1 partecipant");
+    function Extraction() public {
+        require (LotteryPartecipants.length >=2, "To extract the winner we must have at least 1 partecipant");
         require(msg.sender == owner, "Only Luca can extract the winners :)");
-        randNo= uint (keccak256(abi.encodePacked (msg.sender, block.timestamp)))%LotteryPartecipants.length;
+        randNo= uint (keccak256(abi.encodePacked (msg.sender, block.timestamp)))%LotteryPartecipants.length-1;
         //wallet=LotteryPartecipants[randNo];
-        winner=randNo;
+        winner=randNo+1;
         removeIndex(randNo);
-        return LotteryPartecipants;
-
+    }
+    function GetW() public view returns (uint256  x ){
+        return (winner);
     }
     function Winner() public view returns (Ticket memory) {
         require(msg.sender == owner, "Only Luca can read all the tickets :)");
