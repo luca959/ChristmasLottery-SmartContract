@@ -108,7 +108,6 @@ contract ChristmasLottery{
 
     function closeLottery() public {
         require(msg.sender == owner, "Only Luca can Close the lottery :)");
-
         for (uint256 i = 1; i < id; i++) {
             delete LotteryFeed[i];
         }
@@ -117,7 +116,9 @@ contract ChristmasLottery{
         delete id;
         delete last;
         delete LotteryKey;
-    
+        delete winner;
+        delete randNo;
+        delete randNonce;
     }
 
 
