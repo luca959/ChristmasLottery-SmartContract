@@ -57,7 +57,7 @@ contract ChristmasLottery{
         require (LotteryPartecipants.length >0, " we must have at least 1 partecipant");
         uint256 lastItem=LotteryPartecipants.length-1;
         winner=LotteryPartecipants[randNo];
-        if (LotteryPartecipants.length>0){
+        if (LotteryPartecipants.length>1){
             LotteryPartecipants[randNo]=LotteryPartecipants[lastItem];
         }
         LotteryPartecipants.pop();
@@ -67,7 +67,7 @@ contract ChristmasLottery{
 
         require (LotteryPartecipants.length >= 1, "To extract the winner we must have at least 1 partecipant");
         require(msg.sender == owner, "Only Luca can extract the winners :)");
-        randNo= uint(keccak256(abi.encodePacked(block.timestamp,msg.sender,randNonce)))%LotteryPartecipants.length;
+        randNo= uint(keccak256(abi.encodePacked(block.timestamp,msg.sender,randNonce)))%(LotteryPartecipants.length);
         randNonce++;
         //wallet=LotteryPartecipants[randNo];
         //randNo++;
@@ -86,7 +86,7 @@ contract ChristmasLottery{
         require(msg.sender == owner, "Only Luca can sell Ticket :)");
         require (bytes(_name).length > 0 && bytes(_name).length < 256, "Message cannot be empty and cannot be longer than 256 chars");
         require (_NumOfTickets > 0, "Buyer must buy at least 1 ticket");
-        require (_NumOfTickets < 99, "Buyer must buy at least 1 ticket");
+        require (_NumOfTickets <= 99, "Buyer must buy at least 1 ticket");
         id = uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, randNonce))) % 900;
         id = id + 100;
         randNonce++;
