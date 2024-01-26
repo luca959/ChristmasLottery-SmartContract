@@ -83,6 +83,7 @@ contract ChristmasLottery{
     }
 
     function SellTicket(string memory _name,string memory _surname,uint256  _NumOfTickets) public {
+        require(msg.sender == owner, "Only Luca can sell Ticket :)");
         require (bytes(_name).length > 0 && bytes(_name).length < 256, "Message cannot be empty and cannot be longer than 256 chars");
         require (_NumOfTickets > 0, "Buyer must buy at least 1 ticket");
         require (_NumOfTickets < 99, "Buyer must buy at least 1 ticket");
