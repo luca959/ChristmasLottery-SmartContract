@@ -54,23 +54,27 @@ contract ChristmasLottery{
         return (messages);
     }
     function removeIndex() private {   
-        require (LotteryPartecipants.length >=0, " we must have at least 1 partecipant");
-        uint256 lastItem=LotteryPartecipants.length;
+        require (LotteryPartecipants.length >0, " we must have at least 1 partecipant");
+        uint256 lastItem=LotteryPartecipants.length-1;
         winner=LotteryPartecipants[randNo];
-        LotteryPartecipants[randNo]=LotteryPartecipants[lastItem];
-        //LotteryPartecipants.pop();
+        if (LotteryPartecipants.length>1){
+            LotteryPartecipants[randNo]=LotteryPartecipants[lastItem];
+        }
+        LotteryPartecipants.pop();
     }
- 
+ //
     function Extraction() public {
 
         require (LotteryPartecipants.length >= 1, "To extract the winner we must have at least 1 partecipant");
         require(msg.sender == owner, "Only Luca can extract the winners :)");
-        randNo= uint(keccak256(abi.encodePacked(block.timestamp,msg.sender,randNonce)));
+        randNo= uint(keccak256(abi.encodePacked(block.timestamp,msg.sender,randNonce)))%LotteryKey.length-1;
         randNonce++;
         //wallet=LotteryPartecipants[randNo];
-        randNo++;
+       //randNo++;
         removeIndex();
     }
+
+    //a,c,d,b //c,d,b,a
     function GetW() public view returns (uint256  x ){
         return (randNo+1);
     }
@@ -87,10 +91,14 @@ contract ChristmasLottery{
         id = uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, randNonce))) % 900;
         id = id + 100;
         randNonce++;
-
+        //check to do not replace an id
+        while (LotteryFeed[id].matricola == id){
+            id = uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, randNonce))) % 900;
+            id = id + 100;
+            randNonce++;
+        }
         if (LotteryFeed[id].date == 0)
             writers.push(msg.sender);
-        
         LotteryFeed[id] = Ticket(block.timestamp, _name,_surname,id);
         for (uint256 i = 0; i < _NumOfTickets ; i++) {
             LotteryPartecipants.push(id);
