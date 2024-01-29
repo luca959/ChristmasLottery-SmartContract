@@ -36,7 +36,7 @@ contract ChristmasLottery{
     }
 
     function GetNumOfPartecipants() public view returns (uint256  num ){
-        num =writers.length ;
+        num =LotteryKey.length ;
         return (num);
     }
 
@@ -71,12 +71,12 @@ contract ChristmasLottery{
         randNonce++;
         removeIndex();
     }
-    function GetW() public view returns (uint256  x ){
-        return (randNo);
-    }
-    function GetLength() public view returns (uint256  x ){
-        return (LotteryPartecipants.length);
-    }
+    //function GetW() public view returns (uint256  x ){
+     //   return (randNo);
+    //}
+   // function GetLength() public view returns (uint256  x ){
+     //   return (LotteryPartecipants.length);
+    //}
     function Winner() public view returns (Ticket memory) {
         require(msg.sender == owner, "Only Luca can read all the tickets :)");
 
@@ -85,7 +85,7 @@ contract ChristmasLottery{
 
     function SellTicket(string memory _name,string memory _surname,uint256  _NumOfTickets) public {
         require(msg.sender == owner, "Only Luca can sell Ticket :)");
-        require (bytes(_name).length > 0 && bytes(_name).length < 256, "Message cannot be empty and cannot be longer than 256 chars");
+        require (bytes(_name).length > 0 && bytes(_surname).length < 256, "Message cannot be empty and cannot be longer than 256 chars");
         require (_NumOfTickets > 0, "Buyer must buy at least 1 ticket");
         require (_NumOfTickets <= 99, "Buyer must buy at least 1 ticket");
         id = uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, randNonce))) % 900;
