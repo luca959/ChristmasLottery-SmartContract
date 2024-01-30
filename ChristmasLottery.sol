@@ -18,18 +18,18 @@ contract ChristmasLottery{
     uint256 winner;
     uint256 last;
     uint256 randNo;
-    address[] writers;
     uint256[] LotteryPartecipants;
     uint256[] LotteryKey;
     uint256 randNonce = 0;
+    uint256 isOwner=0;
 
     
-    event PersonAdded(uint256 _data, uint256 id,string _name, string _surname,uint256 indexed _NumOfTickets);
+    event PersonAdded(uint256 _data, uint256 id,string _name, string _surname,uint256 _NumOfTickets);
 
     constructor() {
         owner = msg.sender;
     }
-
+   
     function getLastTicketSold() public view returns (Ticket memory) {
         require(msg.sender == owner, "Only Luca can read the last ticket bought :)");
         return (LotteryFeed[last]);
@@ -97,8 +97,6 @@ contract ChristmasLottery{
             id = id + 100;
             randNonce++;
         }
-        if (LotteryFeed[id].date == 0)
-            writers.push(msg.sender);
         LotteryFeed[id] = Ticket(block.timestamp, _name,_surname,id);
         for (uint256 i = 0; i < _NumOfTickets ; i++) {
             LotteryPartecipants.push(id);
@@ -113,7 +111,6 @@ contract ChristmasLottery{
         for (uint256 i = 1; i < LotteryKey.length; i++) {
             delete LotteryFeed[LotteryKey[i]];
         }
-        delete writers;
         delete LotteryPartecipants;
         delete id;
         delete last;
